@@ -1,0 +1,244 @@
+You are a principal cloud architect and distributed systems engineer. Upgrade my existing deployment platform into a fully functional, production-grade Platform-as-a-Service (PaaS) similar to Render/Netlify using real infrastructure on Google Cloud Platform.
+
+⚠️ STRICT RULES (MANDATORY):
+
+* NO mock data, NO dummy logic, NO placeholders
+* ALL features must be fully implemented end-to-end
+* ALL APIs must be functional and connected to real services
+* ALL deployments must run real code in real containers
+* ALL integrations (GitHub, Docker, GCP) must be real and working
+* Provide production-ready code only
+
+---
+
+# 🎯 OBJECTIVE
+
+Build a real cloud deployment system where:
+
+* Users authenticate via GitHub OAuth
+* Select repositories
+* Click deploy
+* System builds, containerizes, deploys
+* Returns live public URL
+* Supports logs, redeploy, and scaling
+
+---
+
+# 🏗️ COMPLETE SYSTEM DESIGN
+
+## 1. AUTH + GITHUB INTEGRATION (REAL)
+
+* Implement GitHub OAuth (no mocks)
+* Store access tokens securely (encrypted)
+* Fetch user repositories using GitHub API
+* Allow:
+
+  * Repo selection
+  * Branch selection
+* Setup GitHub Webhooks:
+
+  * Auto deploy on push events
+* Use real git clone using OAuth token
+
+---
+
+## 2. CONTROL PLANE (BACKEND – REAL)
+
+* Node.js + Express backend
+* MongoDB (real database connection)
+* Implement:
+
+### APIs (Fully Working)
+
+* POST /auth/github
+* GET /repos (fetch from GitHub API)
+* POST /deploy (create deployment job)
+* GET /deployments
+* GET /deployments/:id/logs
+* POST /webhook/github
+* POST /nodes/register
+* GET /nodes/status
+
+---
+
+## 3. JOB QUEUE + SCHEDULER (REAL)
+
+* Use BullMQ with Redis OR implement custom queue
+* Features:
+
+  * Job persistence
+  * Retry mechanism
+  * Failure handling
+* Scheduler must:
+
+  * Select least-loaded node
+  * Track CPU/memory usage
+  * Assign jobs dynamically
+
+---
+
+## 4. EXECUTION LAYER (CRITICAL – REAL SERVERS)
+
+### Runner Agent (REAL SERVICE)
+
+* Node.js daemon running on each VM
+* Communicates with backend via REST/WebSocket
+* Responsibilities:
+
+  * Pull deployment job
+  * Clone GitHub repo securely
+  * Detect project type (Node, static, etc.)
+  * Dynamically generate Dockerfile
+  * Build Docker image
+  * Run container with:
+
+    * Unique port
+    * CPU & memory limits
+  * Send logs + status to backend
+
+---
+
+## 5. DOCKER PIPELINE (REAL)
+
+* NO prebuilt images
+* Dynamically generate Dockerfile:
+
+  * Node.js → install deps + run app
+  * Static → build + serve via Nginx
+* Commands:
+
+  * docker build
+  * docker run
+* Use:
+
+  * --memory
+  * --cpus
+* Container isolation mandatory
+
+---
+
+## 6. NETWORKING + PUBLIC ACCESS (REAL)
+
+### GCP SETUP (MANDATORY)
+
+* Create:
+
+  * 1 VM (backend)
+  * 2+ VMs (workers)
+* Install Docker on all VMs
+* Configure firewall:
+
+  * Open ports (80, 443, 3000–4000)
+
+### URL SYSTEM:
+
+* Each deployment gets:
+
+  * Public IP + port OR
+  * Reverse proxy route
+
+### Reverse Proxy:
+
+* Use Nginx:
+
+  * Map subpaths or ports
+  * Route traffic to containers
+
+---
+
+## 7. LOGGING SYSTEM (REAL)
+
+* Capture container logs:
+
+  * docker logs
+* Stream logs to backend
+* Store logs in database
+* Provide real-time log streaming via WebSockets
+
+---
+
+## 8. FRONTEND (REAL DASHBOARD)
+
+* Repo selection UI (from GitHub API)
+* Deploy button
+* Deployment list:
+
+  * status (building, running, failed)
+* Logs viewer (live streaming)
+* Show live URL
+
+---
+
+## 9. SECURITY (STRICT)
+
+* No root containers
+* Sanitize repo input
+* Limit CPU/RAM per container
+* Timeout long-running builds
+* Prevent malicious execution
+
+---
+
+## 10. NODE MANAGEMENT (REAL)
+
+* Node registration API
+* Health checks (heartbeat)
+* Track:
+
+  * CPU usage
+  * Active containers
+* Auto remove dead nodes
+
+---
+
+## 11. SCALING (REALISTIC)
+
+* Support multiple worker nodes
+* Scheduler distributes load
+* Horizontal scaling supported
+
+---
+
+# ⚙️ INFRASTRUCTURE DETAILS
+
+## Google Cloud Platform (MANDATORY)
+
+* Use Ubuntu 22.04
+* Install:
+
+  * Docker
+  * Node.js
+  * MongoDB (or Atlas)
+* Use static external IP for backend
+* Use SSH for setup
+
+---
+
+# 📦 DELIVERABLES (STRICT)
+
+You MUST provide:
+
+1. Complete backend code (no pseudo-code)
+2. Runner agent full implementation
+3. Dockerfile generator logic
+4. GitHub OAuth integration code
+5. Webhook handling
+6. Job queue system
+7. GCP setup commands (step-by-step)
+8. Nginx config for routing
+9. API documentation
+10. End-to-end working flow
+
+---
+
+# 🧠 FINAL EXPECTATION
+
+The system must:
+
+* Accept real GitHub repos
+* Build real containers
+* Deploy on real GCP VMs
+* Provide working public URLs
+* Handle multiple deployments
+
+NO SIMULATION. NO MOCKS. FULL REAL SYSTEM.
