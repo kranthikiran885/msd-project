@@ -48,6 +48,7 @@ const healthcheckRoutes = require("./routes/healthcheck")
 const rollbackRoutes = require("./routes/rollback")
 const autoscalingRoutes = require("./routes/autoscaling")
 const loadbalancerRoutes = require("./routes/loadbalancer")
+const storageRoutes = require("./routes/storage")
 
 const app = express()
 
@@ -156,6 +157,7 @@ app.use("/api/healthcheck", healthcheckRoutes)
 app.use("/api/rollback", rollbackRoutes)
 app.use("/api/autoscaling", autoscalingRoutes)
 app.use("/api/loadbalancer", loadbalancerRoutes)
+app.use("/api/storage", storageRoutes)
 
 // Error handling
 app.use(errorHandler)
