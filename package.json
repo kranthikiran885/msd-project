@@ -22,7 +22,14 @@
     "deploy:dry-run": "bash scripts/deploy.sh production us-east-1 true",
     "test:run": "bash scripts/run-tests.sh",
     "setup": "npm install:all && npm run health-check",
-    "verify": "npm run lint && npm run test:all && npm run health-check"
+    "verify": "npm run lint && npm run test:all && npm run health-check",
+    "qa:full": "node qa/run-qa.js",
+    "qa:audit": "node -e \"const SystemAudit = require('./qa/system-audit'); new SystemAudit().runFullAudit()\"",
+    "qa:e2e": "node -e \"const E2E = require('./qa/e2e-tests'); new E2E().runAllTests()\"",
+    "qa:security": "node -e \"const Security = require('./qa/security-tests'); new Security().runAllTests()\"",
+    "qa:performance": "node -e \"const Perf = require('./qa/performance-tests'); new Perf().runAllTests()\"",
+    "qa:fast": "node qa/run-qa.js --fast",
+    "qa:report": "echo 'Opening latest QA report...' && open qa/reports/qa-report-*.html 2>/dev/null || echo 'Report not found. Run: npm run qa:full'"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
