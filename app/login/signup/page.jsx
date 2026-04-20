@@ -59,6 +59,15 @@ export default function SignupPage() {
       // Redirect to login page after successful signup
       router.push("/login")
     } catch (err) {
+      setError(err.message || "Failed to create account")
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  function handleGoogleSignup() {
+    apiClient.startGoogleOAuth()
+  }
 
   function handleGitHubSignup() {
     apiClient.startGitHubOAuth()

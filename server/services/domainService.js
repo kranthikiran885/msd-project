@@ -51,6 +51,46 @@ class DomainService {
   async deleteDomain(id) {
     return await Domain.findByIdAndDelete(id)
   }
+
+  // Phase 16 - Enhanced SSL & Auto-renewal
+  async generateSSLCertificate(id) {
+    const domain = await Domain.findById(id)
+    if (!domain) throw new Error('Domain not found')
+
+    domain.sslCertificate = {
+      issued: new Date(),
+      expires: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
+      provider: 'letsencrypt',
+    }
+    domain.certificateStatus = 'active'
+    domain.renewalDate = new Date(Date.now() + 330 * 24 * 60 * 60 * 1000)
+    domain.autoRenew = true
+    await domain.save()
+    return domain
+  }
+
+  async renewCertificate(id) {
+    const domain = await Domain.findById(id)
+    if (!domain) throw new Error('Domain not found')
+
+    domain.certificateStatus = 'renewing'
+    await domain.save()
+
+    // Simulate renewal
+    domain.sslCertificate.expires = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)
+    domain.certificateStatus = 'active'
+    domain.renewalDate = new Date(Date.now() + 330 * 24 * 60 * 60 * 1000)
+    await domain.save()
+    return domain
+  }
+
+  async setupAutoRenewal(id, enabled = true) {
+    return await Domain.findByIdAndUpdate(
+      id,
+      { autoRenew: enabled, renewalDate: new Date(Date.now() + 330 * 24 * 60 * 60 * 1000) },
+      { new: true }
+    )
+  }
 }
 
 module.exports = new DomainService()

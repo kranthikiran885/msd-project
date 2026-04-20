@@ -63,5 +63,7 @@ const alertSchema = new mongoose.Schema(
 
 alertSchema.index({ projectId: 1, active: 1 })
 alertSchema.index({ metricType: 1 })
+alertSchema.index({ severity: 1 })
+alertSchema.index({ lastTriggered: -1 })
 
 module.exports = mongoose.models.Alert || mongoose.model("Alert", alertSchema)

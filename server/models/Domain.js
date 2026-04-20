@@ -42,6 +42,21 @@ const domainSchema = new mongoose.Schema(
       enum: ["pending", "active", "expired"],
       default: "pending",
     },
+    autoRenew: {
+      type: Boolean,
+      default: true,
+    },
+    sslProvider: {
+      type: String,
+      enum: ["letsencrypt", "custom"],
+      default: "letsencrypt",
+    },
+    renewalDate: Date,
+    productionReady: {
+      type: Boolean,
+      default: false,
+    },
+    redirectUrl: String,
   },
   { timestamps: true },
 )
