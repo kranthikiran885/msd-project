@@ -268,7 +268,6 @@ class BillingService {
       default: true,
     };
   }
-}
 
   // Phase 19 Enhancements - Multi-tenancy
   async createTenant(tenantConfig) {
